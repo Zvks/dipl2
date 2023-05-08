@@ -7,6 +7,7 @@ from kivy.lang import Builder
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
+from kivy.uix.image import AsyncImage
 import time
 import numpy
 from matplotlib import pyplot as plt
@@ -95,7 +96,7 @@ class App_defect_detection(TabbedPanel):
         timestr = time.strftime("%Y%m%d_%H%M%S")
         filename = "IMG_{}.png".format(timestr)
         camera.export_to_png(filename)
-        carousel.add_widget(Image(source=filename))
+        carousel.add_widget(AsyncImage(source=filename))
         print("Captured")
         return col_image
 

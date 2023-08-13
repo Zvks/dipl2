@@ -66,15 +66,16 @@ def get_num(data_img):
 
 try:
     # Загрузка обученной модели из файла
-    path_to_img = "/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/app_img"
-    path_to_model = '/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/16_model_4'
+    path_to_img = "/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/app_tec/app_img"
+    path_to_model = '/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/16_model_4.h5'
     model = keras.models.load_model(path_to_model)
     print("Модель загружена")
     data_img = get_img(path_to_img)
     x_test = get_num(data_img)
     defect = model.predict(x_test)
+    tec_list = open('app_tec/list', 'w')
     for i in defect:
-        print(i)
+        #print(i)
         n = 0
         for j in i:
             ans = defect_class[n] + str(j)
@@ -83,8 +84,10 @@ try:
             n += 1
             if j == max(i):
                 short_finish_list.append(ans)
-                print(short_finish_list)
-    #print(finish_list)
+                tec_list.write(ans + '\n')
+                print(ans)
+    print(short_finish_list)
+    tec_list.close()
 except Exception:
     print('Ошибка')
 else:

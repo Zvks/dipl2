@@ -7,6 +7,7 @@ import os
 import itertools
 #from keras.utils 
 import np_utils
+import random
 from sklearn.preprocessing import Normalizer, scale
 from sklearn.datasets import load_files
 import tensorflow as tf
@@ -73,9 +74,8 @@ try:
     data_img = get_img(path_to_img)
     x_test = get_num(data_img)
     defect = model.predict(x_test)
-    tec_list = open('app_tec/list', 'w')
     for i in defect:
-        #print(i)
+    #print(i)
         n = 0
         for j in i:
             ans = defect_class[n] + str(j)
@@ -83,11 +83,8 @@ try:
             finish_list.append(ans)
             n += 1
             if j == max(i):
-                short_finish_list.append(ans)
-                tec_list.write(ans + '\n')
-                print(ans)
-    print(short_finish_list)
-    tec_list.close()
+                short_finish_list.append(ans)   
+    print(short_finish_list)   
 except Exception:
     print('Ошибка')
 else:

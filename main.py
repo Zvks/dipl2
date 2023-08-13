@@ -22,6 +22,13 @@ Builder.load_string('''
         size_hint_y: None
         height: '48dp'
         on_press: root.capture()
+    Button:
+        text: 'press me'
+        height: '48dp'
+        on_press: print("ouch! More gently please")
+        on_release: print("ahhh")
+        on_state:
+            print("my current state is {}".format(self.state))
 ''')
 
 

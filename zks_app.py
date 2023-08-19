@@ -145,12 +145,9 @@ class App_defect_detection(TabbedPanel):
         return col_image
         
     def defect_analysis(self):
-        defect_class = ['gost_21014_2022_non_metallic_inclusion_test(In) = ',
-                'gost_21014_2022_pitted_surface_test(Ps) = ',
-                'gost_21014_2022_rippled_surface_test(Cr) = ', 
-                'gost_21014_2022_rolled_in_scale_test(RS) = ', 
-                'gost_21014_2022_scratch_test(Sc) = ', 
-                'gost_21014_2022_sticker_patches_test(Pa) = ']
+        with open('GOST_list_defect.json', 'r', encoding='utf-8') as f:
+            defect_classes
+
         finish_list = []
         short_finish_list = ''
 

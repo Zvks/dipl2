@@ -31,7 +31,7 @@ from IPython.display import display
 from PIL import Image
 # We just have the file names in the x set. Let's load the images and convert them into array.
 from keras.preprocessing.image import array_to_img, img_to_array, load_img
-
+import json
 #%matplotlib inline
 mpl.style.use( 'ggplot' )
 plt.style.use('fivethirtyeight')
@@ -50,14 +50,42 @@ sns.set(context="notebook", palette="dark", style = 'whitegrid' , color_codes=Tr
 # print("Testing Inclusion data:   ",len(os.listdir(test_dir+'/'+'Inclusion')))
 # print("Validation Inclusion data:",len(os.listdir(val_dir+'/'+'Inclusion')))
 
-train_dir = '/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/train'
-val_dir = '/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/val'
-test_dir='/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/test'
-print("Path Direcorty:      ",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data"))
-print("Train Direcorty:     ",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/train"))
-print("Test Direcorty:      ",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/test"))
-print("Validation Direcorty:",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/val"))
+train_dir = '/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data/train'
+val_dir = '/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data/val'
+test_dir='/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data/test'
+result_dir = '/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/result/'
+print("Path Direcorty:      ",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data"))
+print("Train Direcorty:     ",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data/train"))
+print("Test Direcorty:      ",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data/test"))
+print("Validation Direcorty:",os.listdir("/media/user/26C2BC47C2BC1CCD/D_projects/prct/dipl2/img2/NEU_Metal_Surface_Defects_Data/val"))
 
+def result_dict(defect_class_dsc_path, result_path):
+    try:
+        defect_class_dsc = []
+        list_defect_class_dsc = []
+        class_list = sorted(os.listdir(defect_class_dsc_path))  
+
+        for class_name in class_list:       
+            defect_class_dsc.append(class_name)
+            info = os.getxattr(defect_class_dsc_path + '/' + class_name,'user.description' ,follow_symlinks=True)
+            info = info.decode("utf-8")
+            defect_class_dsc.append(info)
+            list_defect_class_dsc.append(defect_class_dsc)
+            defect_class_dsc = []
+
+        to_json = {
+            "GOST_list_defect": list_defect_class_dsc
+        }
+        with open(result_path + 'GOST_list_defect.json', 'w') as f:
+            f.write(json.dumps(to_json, sort_keys=False, indent=4, ensure_ascii=False, separators=(',', ': ')))
+        f.close()
+    except Exception:
+        print('Ошибка')
+    else:
+        print(list_defect_class_dsc)
+    finally:
+        print('Завершение')
+    return Exception
 # Distribution for 'Inclusion' surface defect
 # print("Training gost 21014_2022 non metallic inclusion training data:  ",len(os.listdir(train_dir+'/'+'gost_21014_2022_non_metallic_inclusion')))
 # print("Testing gost 21014_2022 non metallic inclusion testing data:   ",len(os.listdir(test_dir+'/'+'gost_21014_2022_non_metallic_inclusion_test')))
@@ -163,7 +191,7 @@ model.summary()
 callbacks = myCallback()
 history = model.fit(train_generator,
         batch_size = 32,
-        epochs = 100,
+        epochs = 5,
         validation_data = validation_generator,
         callbacks = [callbacks],
         verbose = 1, shuffle = True)
@@ -187,7 +215,7 @@ plt.show()
 
 # First, we are going to load the file names and their respective target labels into numpy array! 
 
-test_dir = '/media/user/26C2BC47C2BC1CCD/D_projects/dipl_2/dipl/img2/NEU_Metal_Surface_Defects_Data/test'
+
 
 def load_dataset(path):
     data = load_files(path)
@@ -230,4 +258,5 @@ for i, idx in enumerate(np.random.choice(x_test.shape[0], size=16, replace=False
     true_idx = np.argmax(y_test[idx])
     ax.set_title("{} ({})".format(target_labels[pred_idx], target_labels[true_idx]),
                  color=("green" if pred_idx == true_idx else "red"))
-model.save('16_model_4', save_format='h5')
+model.save(result_dir + '16_model_5.h5', save_format='h5')
+result_dict(test_dir,result_dir)

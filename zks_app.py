@@ -126,7 +126,7 @@ Builder.load_string('''
 #          del self._collection 
 #      collection = property(get_collection, set_collection, del_collection)   
 
-class App_defect_detection(TabbedPanel):#, TextInput):
+class App_defect_detection(TabbedPanel):
     def capture(self):
         col_image = []
         carousel = self.ids['MyCarousel']
@@ -215,11 +215,11 @@ class App_defect_detection(TabbedPanel):#, TextInput):
         # Определение списка имен классов
         IMG_LIST = sorted(os.listdir(PATH))
         print(IMG_LIST)
-        # for file_name in IMG_LIST:
-        #     print(file_name)
-        #     path = str(PATH + file_name)
-        #     print(path)
-        #     os.remove(path)
+        for file_name in IMG_LIST:
+            print(file_name)
+            path = str(PATH + file_name)
+            print(path)
+            os.remove(path)
         return
 
 class App_detect(App):
